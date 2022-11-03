@@ -1,0 +1,12 @@
+character
+utf8mb4 이모지 설정
+timezone 
+아시아 서울
+max_connection
+최대 접속자수 
+
+collation_connection 
+utf8mb4_unicode_ci
+
+collation_server
+utf8mb4_unicode_ci
