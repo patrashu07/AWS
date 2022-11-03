@@ -1,0 +1,25 @@
+1.aws
+->rds =데이터베이스
+->ec2 - 서버 컴퓨팅 
+->s3-simple storage service 저장소
+확장성 데이터 가용성 보안 성능을 제공하는 객체스트리지 서비스 
+->iam 역할을 설정?
+	
+
+ec2로 접속하면 rds에 접속할수있는 부분들이 있다.
+
+2.spring scurity-보안 설정
+->ROLE -role을 통해서 유저생성롤 비회원 롤
+등 유저관련 롤을 설정한다.
+->보안규칙사용여부 
+    -ex)SCRF 보안규칙에따라 코드가 달라진다.
+
+3.WEBsocket, jms -챗봇구현 
+
+4. CI/CD -jenkis . gitactions (깃에서 제공하는)
+
+5.open Api (공공데이터)-
+활용 웹페이지(자바)로 적용
+
+6.네이버 웍스 ,챗봇 구현
+	
