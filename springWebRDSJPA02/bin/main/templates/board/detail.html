@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Insert title here</title>
+        <style type="text/css">
+        	.edit-mode,
+        	.re-edit-mode{
+        		display: none;
+        	}
+        	.flex{display:  flex;}
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script th:inline="javascript">
+       		var bno= "[[${detail.bno}]]";
+       		var rpage=1;
+       		var rpageTotal=0;
+        	$(function(){
+        		setCount();
+        		
+        		$("#text").keyup(inputEnterKey);
+        		$("#btnAdd").click(function(){
+        			rpage++;
+        			setCount();
+        		});
+        	});
+        	
+       		
+       		//삭제처리
+       		function reDeleteProc(rno){// 클릭시 전달받은 rno
+       			//alert("rno:"+rno);
+       		
+       			$.ajax({
+       				url:"/mybatis/boards/"+bno+"/reply/"+rno,
+       				type: "DELETE",//ajax에서만 가능
+       				//type: "POST",
+       				//data: {_method: "DELETE"},
+       				success: function(result){
+       					console.log("삭제개수:"+result);
+       					rpage=1;
+       					setCount();
+       				}
+       			});
+       			
+       		}
+       		
+       		function setCount(){
+       			$.ajax({
+        			url: "/mybatis/boards/"+bno+"/count",
+        			success: function(result){
+        				rpageTotal=result;
+        				getReplies();
+        			}
+        		});
+       		}
+        	
+       		//ajax로 댓글 갖고오는 함수
+        	function getReplies(){
+        		//var bno= "[[${detail.bno}]]";
+        		
+        		$.get("/mybatis/boards/"+bno+"/replies",
+        				{page: rpage},
+        				function(rep){
+        					var content="";
+        					if(rpage>1){
+        						content += $("#display").html();
+        					}
+        					//alert(basehtml);
+        					$("#display").html(content+rep);
+        					console.log("댓글마지막페이지:"+rpageTotal);
+        					if(rpage >= rpageTotal){
+        						$("#btnAdd").hide();
+        					}else{
+        						$("#btnAdd").show();
+        					}
+        					
+        		});
+        		
+        	}
+       		
+       		//댓글에 엔터값이 등록되었을때 댓글등록 실행
+        	function inputEnterKey(event){
+        		if(event.which==13){
+        			console.log("엔터키가 입력되었네요");
+        			registReply();
+        		}
+        	}
+       		
+       		//ajax로 댓글 등록 : 등록버튼이 눌러졌을때 실행
+        	function registReply(){
+       			var text=$("#text").val();
+       			if(text.trim()==""){
+       				alert("댓글을 입력하지 않았어요");
+       				$("#text").val("");
+       				return;
+       			}
+       			$.ajax({
+       				url : "/mybatis/boards/"+bno+"/reply",
+       				type: "POST",
+       				data: {
+       					text : text ,// key(문자열): value(현재 변수적용)
+       					writer : $("#writer").val()},
+       				error: function(error){
+       					alert("댓글 등록이 정상적으로 처리 되지 않았어요\n"+error);
+       				},
+       				success:function(result){
+       					console.log("처리결과:"+result);
+       					rpage=1;
+       					setCount();
+       					$("#text").val("");
+       				}
+       			});
+       			
+        		/*
+        		$.post("/mybatis/boards/"+bno+"/reply",//url
+        				{text: $("#text").val(),writer: $("#writer").val()},//data
+        				function(data, status, xhr){
+        					console.log("처리결과:"+status);
+        					if(status=="success"){
+        						getReplies();	
+        					}
+        					if(status=="error"){
+        						alert("등록 실패! : errorCode("+xhr.status+")");
+        					}
+        					
+        				}
+        		);
+        		*/
+        		
+        	}
+        	
+        	function showEditMode(){
+        		$(".edit-mode").show();
+        		$(".default-mode").hide();
+        	}
+        	function showDefaultMode(){
+        		$(".edit-mode").hide();
+        		$(".default-mode").show();
+        	}
+        	function reEditMode(el){
+        		$(el).parents("tr").css("background-color","yellow").find(".re-edit-mode").show();
+        		$(el).parents("tr").find(".re-def-mode").hide();
+        	}
+        	function reDefMode(el){
+        		$(el).parents("tr").find(".re-edit-mode").hide();
+        		$(el).parents("tr").css("background-color","transparent").find(".re-def-mode").show();
+        	}
+        	
+        	//댓글 수정처리
+        	function reEditProc(el){
+        		//pk: rno, 수정data: text
+        		var rno=$(el).siblings(".rno-data").val();
+        		var text=$(el).parents("tr").find(".text-data").val();
+        		$.ajax({
+        			url: "/mybatis/boards/"+bno+"/reply/"+rno,
+        			type: "PUT",
+        			data: {text: text},
+        			success: function(){
+        				console.log("수정완료");
+        				rpage=1;
+        				setCount();
+        			},
+        			error:function(){
+        				alert("수정되지 않았어요");
+        			}
+        		});
+	
+        	}
+        	
+        	
+        	
+        </script>
+    </head>
+    <body>
+    	<a href="/">HOME</a>
+        <p>마이바티스 게시글 상세페이지</p>
+        <form id="form-edit" th:action="|/mybatis/boards/${detail.bno}|" method="post" >
+	        <ul>
+	        	<li>[[${detail.bno}]]</li>
+	        	<li>[[${detail.writer}]]</li>
+	        	<li>
+	        		<div class="default-mode">[[${detail.title}]]</div>
+	        		<div class="edit-mode"><input type="text" name="title" th:value="${detail.title}"></div>
+	        	</li>
+	        	<li>
+	        		<div class="default-mode">[[${detail.content}]]</div>
+	        		<div class="edit-mode">
+	        			<textarea rows="5" cols="60" name="content">[[${detail.content}]]</textarea>
+	        		</div>
+	        	</li>
+	        	<li class="edit-mode">
+	        		<input type="hidden" name="_method" value="PUT">
+	        		<button type="submit">수정완료</button>
+	        		<button type="button" onclick="showDefaultMode()">취소</button>
+				</li>
+	        </ul>
+        </form>
+        <div class="default-mode flex">
+       		<button type="button" id="btn-edit" onclick="showEditMode()">수정</button>
+       		<form th:action="@{/mybatis/boards/{bno}(bno=${detail.bno})}" method="post" onsubmit="confirmDelete();">
+				<input type="hidden" name="_method" value="DELETE">
+				<button type="submit">삭제</button>
+			</form>
+		</div>
+		<hr>
+		<section>
+			<h1>댓글영역</h1>
+			<div>
+				<div>
+					<input type="text" id="text"  placeholder="댓글입력"  >
+					<input type="hidden" id="writer"  value="테스트">
+					<button type="button" onclick="registReply()">등록</button>
+				</div>
+				<div>
+					<table border="1">
+						<thead>
+							<tr>
+								<th>댓글</th>
+								<th>
+									<div>작성자</div>
+									<div>작성일</div>
+								</th>
+								<th>관리</th>
+							</tr>
+						</thead>
+						<tbody id="display">
+						</tbody>
+					</table>
+				</div>
+				<button type="button" id="btnAdd">더보기(+)</button>
+			</div>
+		</section>
+        
+    </body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Insert title here</title>
+    </head>
+    <body>
+    	<a href="/">HOME</a>
+        <p>마이바티스 글쓰기</p>
+        <form action="/mybatis/boards" method="post">
+        	<p>
+        		<input type="text" placeholder="작성자" name="writer">
+        	</p>
+        	<p>
+        		<input type="text" placeholder="제목" name="title">
+        	</p>
+        	<p>
+        		<textarea rows="5" cols="60" placeholder="내용입력" name="content"></textarea>
+        	</p>
+        	<p>
+        		<button type="submit">등록</button>
+        	</p>
+        </form>
+        
+    </body>
+</html>

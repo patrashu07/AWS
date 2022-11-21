@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+
+<body>
+	<a href="/">HOME</a>
+	<p>게시글페이지입니다</p>
+	<a href="/mybatis/boards/registration">마이바티스 글쓰기</a>
+	<table>
+		<tr>
+			<td>번호</td>
+			<td>제목</td>
+			<td>조회수</td>
+			<td>작성자</td>
+			<td>작성일</td>
+			<td>최종수정일</td>
+		</tr>
+		<tr th:each="ent : ${list}">
+			<td th:text ="${ent.bno}"></td>
+			<td ><a th:href= "@{/mybatis/boards/{bno}(bno=${ent.bno})}">[[${ent.title}]]</a></td>
+			<td th:text ="${ent.readCount}">조회수</td>
+			<td th:text ="${ent.writer}">작성자</td>
+			<td th:text ="${ent.updatedDate}">최종수정일</td>
+		</tr>
+
+
+	</table>
+</body>
+</html>

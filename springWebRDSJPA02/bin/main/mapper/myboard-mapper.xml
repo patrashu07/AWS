@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.nowon.domain.dao.MyBoardMapper">
+	<!--Spring에서는 namespace는 @Mapper 인터페이스를 상속하는 것처럼 생각하자-->
+	  <!--mapper인터페이스의 추상메서드이름과  id가 일치되도록 작성  , result type =-> DTO-->
+	  <!--xml쓸떄 Resource[] mapperLocations=null; ssfb.setMapperLocations(mapperLocations);  -->
+	  <!--String locationPattern="classPath:mapper/**/*-mapper.xml";
+		Resource[] mapperLocations = new PathMatchingResourcePatternResolver().getResources(locationPattern);  -->
+	 <insert id="save" >
+  	insert into my_board(title, content, writer,read_count)
+  	values(#{title}, #{content}, #{writer}, #{readCount} )
+  </insert>
+  
+  <select id="findByBno" resultType="com.green.nowon.domain.dto.mybatis.MyBoardDTO">
+  	select * from my_board where bno=#{bno}
+  </select>
+  <update id="updateByBno">
+  	update my_board set title=#{title}, content=#{content} where bno=#{bno}
+  </update>
+  
+  <delete id="deleteByBno">
+  	delete from my_board where bno=#{bno}
+  </delete>
+</mapper>

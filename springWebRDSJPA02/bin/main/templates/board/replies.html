@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<tr th:each="dto : ${list}">
+		<td class="re-def-mode" th:text="${dto.text}">댓글</td>
+		<td class="re-edit-mode">
+			<input class="text-data"  type="text" th:value="${dto.text}">
+		</td>
+		<td>
+			<div th:text="${dto.writer}">작성자</div>
+			<div th:text="${dto.createdDate}">작성일</div>
+		</td>
+		<td class="re-def-mode">
+			<button type="button"  onclick="reEditMode(this)">수정</button>
+			<button type="button" th:onclick="|reDeleteProc(${dto.rno})|">삭제</button>
+		</td>
+		<td class="re-edit-mode">
+			<input class="rno-data" type="hidden" th:value="${dto.rno}">
+			<button type="button" onclick="reEditProc(this)">수정완료</button>
+			<button type="button" onclick="reDefMode(this)">취소</button>
+		</td>
+	</tr>
+
+</html>
