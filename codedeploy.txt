@@ -1,0 +1,47 @@
+codedeploy ec2서버에 설치
+wget https://aws-codedeploy-ap-northeast-2.s3.ap-northeast-2.amazonaws.com/latest/install
+
+wget https://aws-codedeploy-ap-northeast-2.s3.ap-northeast-2.amazonaws.com/latest/install
+
+권한부여
+chmod +x install
+
+설치
+sudo ./install auto > /tmp/logfile
+
+실행시키면 오류난다.
+sudo service codedeploy-agent status
+
+sudo systemctl status codedeploy
+
+https://bcp0109.tistory.com/category/%EA%B3%B5%EB%B6%80/CI%20%26%20CD
+
+인스턴스 역할 iam 추가
+
+쉘스크립트?
+
+
+komoran
+ 자연어처리  ? 
+챗봇에서 
+환경설정 1. 시간 2. 자바버전 3.wget
+sudo ln -s /usr/share/zoneinfo/Asia/Seoul  /바꿀주소
+
+sudo yum install java -dev 
+sudo yum install -y wget
+
+aws를 gitactionworkflow에 접근을할려면 사용자정보를 통해 넣을수있다.
+
+
+
+accesskey :AKIA3452JTXZYFTAYDU2
+accesskyscret:3qZSD/4GFRUOXL5N/Kqme89SnH348cOyEGQHSEsN
+
+
+codedeploy
+1.github->s3->ec2(CodeDeploy agent 설치)
+2.IAM : 권한설정
+	CodeDeploy role =aws 서비스 : codedeploy
+사용자 :권한부여
+-AWSCodeDeployFullAccess
+ amazons3fullaccess
